@@ -8,8 +8,8 @@ import org.bukkit.command.TabCompleter
 class TabCompleter : TabCompleter {
     override fun onTabComplete(commandSender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
         return when (args.size) {
-            0 -> mutableListOf(commandSender.name)
-            1 -> Bukkit.getOnlinePlayers().map { it.name }.toMutableList()
+            1 -> mutableListOf(commandSender.name, "[ニックネーム]")
+            2 -> (mutableListOf("[指定プレイヤー]") + Bukkit.getOnlinePlayers().map { it.name }).toMutableList()
             else -> mutableListOf()
         }
     }
