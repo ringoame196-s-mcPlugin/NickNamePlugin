@@ -6,10 +6,15 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.plugin.Plugin
 
-class Command : CommandExecutor {
+class Command(plugin: Plugin) : CommandExecutor {
     private val permissionManager = PermissionManager()
     private val nickNameManager = NickNameManager()
+
+    private val config = plugin.config
+    private val setNickNameTag = config.getString("nickNameTag") ?: "!nickNameTag"
+
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) { // 入力不足
             return false
@@ -18,7 +23,7 @@ class Command : CommandExecutor {
         val selectPlayer = sender as? Player?
         val nickName = args[0]
 
-        if (permissionManager.haveSetNickNamePermission(sender)) { // 権限を持っていないとき
+        if (permissionManager.haveSetNickNamePermission(sender) || permissionManager.haveTempSetNickNameTag(sender, setNickNameTag)) { // 権限を持っていないとき
             when (args.size) {
                 1 -> setNickName(sender, nickName, selectPlayer) // 自分自身のニックネームを設定
                 2 -> setOtherPlayerNickName(sender, nickName, args) // 他プレイヤーのニックネームを設定
