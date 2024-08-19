@@ -2,6 +2,7 @@ package com.github.ringoame196_s_mcPlugin
 
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.Sound
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -13,7 +14,7 @@ class Command(plugin: Plugin) : CommandExecutor {
     private val nickNameManager = NickNameManager()
 
     private val config = plugin.config
-    private val setNickNameTag = config.getString("nickNameTag") ?: "!nickNameTag"
+    private val setNickNameTag = config.getString("nickNameTag") ?: "nickNameTag"
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) { // 入力不足
@@ -21,7 +22,7 @@ class Command(plugin: Plugin) : CommandExecutor {
         }
 
         val selectPlayer = sender as? Player?
-        val nickName = args[0]
+        val nickName = supportedColorCode(args[0])
 
         if (permissionManager.haveSetNickNamePermission(sender) || permissionManager.haveTempSetNickNameTag(sender, setNickNameTag)) { // 権限を持っていないとき
             when (args.size) {
@@ -55,11 +56,22 @@ class Command(plugin: Plugin) : CommandExecutor {
         if (selectPlayer != null) {
             val selectPlayerName = selectPlayer.name
             val message = "${ChatColor.AQUA}${selectPlayerName}のニックネームを${nickName}にしました"
+            val sound = Sound.BLOCK_ANVIL_USE
             nickNameManager.setNickName(selectPlayer, nickName)
             sender.sendMessage(message)
+            staging(sender, sound)
         } else {
             val message = "${ChatColor.RED}プレイヤーを指定してください"
             sender.sendMessage(message)
         }
+    }
+
+    private fun staging(sender: CommandSender, sound: Sound) {
+        val player = sender as? Player ?: return
+        player.playSound(player, sound, 1f, 1f)
+    }
+
+    private fun supportedColorCode(text: String): String {
+        return text.replace("&", "§")
     }
 }
