@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 class Command : CommandExecutor {
+    private val permissionManager = PermissionManager()
     private val nickNameManager = NickNameManager()
-    private val playerManager = PlayerManager()
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) { // 入力不足
             return false
@@ -18,7 +18,7 @@ class Command : CommandExecutor {
         val selectPlayer = sender as? Player?
         val nickName = args[0]
 
-        if (nickNameManager.isChangeName(sender)) { // 権限を持っていないとき
+        if (permissionManager.haveSetNickNamePermission(sender)) { // 権限を持っていないとき
             when (args.size) {
                 1 -> setNickName(sender, nickName, selectPlayer) // 自分自身のニックネームを設定
                 2 -> setOtherPlayerNickName(sender, nickName, args) // 他プレイヤーのニックネームを設定
@@ -36,7 +36,7 @@ class Command : CommandExecutor {
     }
 
     private fun setOtherPlayerNickName(sender: CommandSender, nickName: String, args: Array<out String>) {
-        if (nickNameManager.isAdmin(sender)) {
+        if (permissionManager.haveAdminPermission(sender)) {
             val selectPlayerName = args[1]
             val selectPlayer = Bukkit.getPlayer(selectPlayerName)
             setNickName(sender, nickName, selectPlayer) // nicknameを設定する
@@ -50,7 +50,7 @@ class Command : CommandExecutor {
         if (selectPlayer != null) {
             val selectPlayerName = selectPlayer.name
             val message = "${ChatColor.AQUA}${selectPlayerName}のニックネームを${nickName}にしました"
-            playerManager.changeName(selectPlayer, nickName)
+            nickNameManager.setNickName(selectPlayer, nickName)
             sender.sendMessage(message)
         } else {
             val message = "${ChatColor.RED}プレイヤーを指定してください"
