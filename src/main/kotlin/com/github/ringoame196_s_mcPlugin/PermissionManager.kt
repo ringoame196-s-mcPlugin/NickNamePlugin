@@ -15,9 +15,13 @@ class PermissionManager {
         return sender.hasPermission(adminPermission)
     }
 
-    fun haveTmpSetNickNameTag(player: Player, tag: String): Boolean {
-        val havePermission = player.scoreboardTags.contains(tag)
-        player.scoreboardTags.remove(tag) // タグを消す
-        return havePermission
+    fun haveTempSetNickNameTag(sender: CommandSender, tag: String): Boolean {
+        if (sender is Player) {
+            val havePermission = sender.scoreboardTags.contains(tag)
+            sender.scoreboardTags.remove(tag) // タグを消す
+            return havePermission
+        } else { // プレイヤー以外の場合は常にfalse
+            return false
+        }
     }
 }
