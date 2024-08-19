@@ -46,6 +46,16 @@ configure<BukkitPluginDescription> {
         usage = "/nickname <設定したい名前>"
         }
     }
+    permissions {
+        register("nickname.setting") {
+            description = "ニックネームを設定"
+            default = BukkitPluginDescription.Permission.Default.OP
+        }
+        register("nickname.admin") {
+            description = "ニックネームを管理"
+            default = BukkitPluginDescription.Permission.Default.OP
+        }
+    }
 }
 
 tasks.withType<ShadowJar> {
