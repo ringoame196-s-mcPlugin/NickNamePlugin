@@ -6,9 +6,11 @@ class Main : JavaPlugin() {
     override fun onEnable() {
         super.onEnable()
         val plugin = this
+        plugin.saveDefaultConfig() // configファイルを生成
         server.pluginManager.registerEvents(Events(), plugin)
+        // コマンド登録
         val command = getCommand("nickname")
-        command!!.setExecutor(Command())
+        command!!.setExecutor(Command(plugin))
         command.tabCompleter = TabCompleter()
     }
 }
