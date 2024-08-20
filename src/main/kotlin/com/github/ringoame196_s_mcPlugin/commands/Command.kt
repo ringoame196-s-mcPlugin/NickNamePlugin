@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin
 
 class Command(plugin: Plugin) : CommandExecutor {
     private val permissionManager = PermissionManager()
-    private val nickNameManager = NickNameManager()
+    private val nickNameManager = NickNameManager(plugin)
 
     private val config = plugin.config
     private val setNickNameTag = config.getString("nickNameTag") ?: "nickNameTag"

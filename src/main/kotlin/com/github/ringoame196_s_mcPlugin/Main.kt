@@ -7,6 +7,8 @@ class Main : JavaPlugin() {
         super.onEnable()
         val plugin = this
         plugin.saveDefaultConfig() // configファイルを生成
+        val nickNameManager = NickNameManager(plugin)
+        nickNameManager.makeTable() // table作成
         server.pluginManager.registerEvents(Events(), plugin)
         // コマンド登録
         val command = getCommand("nickname")
