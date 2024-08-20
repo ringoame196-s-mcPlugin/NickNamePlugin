@@ -10,7 +10,16 @@ class PlayerJoinEvent(plugin: Plugin) : Listener {
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = e.player
-        val nickname = nickNameManager.acquisitionNickname(player) ?: player.name
-        nickNameManager.setNickName(player, nickname.toString())
+        val nickName = nickNameManager.acquisitionNickname(player) ?: player.name
+        nickNameManager.changeName(player, nickName) // 名前を変更する
+
+        setJoinPlayerMessage(e, nickName) // joinメッセージを変更する
+    }
+    private fun setJoinPlayerMessage(e: PlayerJoinEvent, nickName: String) {
+        val player = e.player
+        val supportedColorNickName = nickNameManager.supportedColorCode(nickName)
+        val playerName = player.name
+        val joinMessage = e.joinMessage?.replace(playerName, "$supportedColorNickName§e")
+        e.joinMessage = joinMessage
     }
 }

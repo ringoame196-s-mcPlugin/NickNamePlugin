@@ -22,7 +22,7 @@ class Command(plugin: Plugin) : CommandExecutor {
         }
 
         val selectPlayer = sender as? Player?
-        val nickName = supportedColorCode(args[0])
+        val nickName = args[0]
 
         if (permissionManager.haveSetNickNamePermission(sender) || permissionManager.haveTempSetNickNameTag(sender, setNickNameTag)) { // 権限を持っていないとき
             when (args.size) {
@@ -69,9 +69,5 @@ class Command(plugin: Plugin) : CommandExecutor {
     private fun staging(sender: CommandSender, sound: Sound) {
         val player = sender as? Player ?: return
         player.playSound(player, sound, 1f, 1f)
-    }
-
-    private fun supportedColorCode(text: String): String {
-        return text.replace("&", "§")
     }
 }

@@ -8,9 +8,14 @@ class NickNameManager(plugin: Plugin) {
     private val dataBaseManager = DataBaseManager()
     private val dataBaseFilePath = "${plugin.dataFolder.path}\\playerData.db"
     fun setNickName(player: Player, nickName: String) {
-        player.setDisplayName(nickName)
-        player.setPlayerListName(nickName)
+        changeName(player, nickName)
         saveNickName(player, nickName) // データベースに保存
+    }
+
+    fun changeName(player: Player, nickName: String) {
+        val supportedColorNickName = supportedColorCode(nickName)
+        player.setDisplayName(supportedColorNickName)
+        player.setPlayerListName(supportedColorNickName)
     }
 
     fun makeTable() {
@@ -42,5 +47,9 @@ class NickNameManager(plugin: Plugin) {
         }
 
         dataBaseManager.runSQLCommand(dataBaseFilePath, command) // 保存
+    }
+
+    fun supportedColorCode(text: String): String {
+        return text.replace("&", "§")
     }
 }
