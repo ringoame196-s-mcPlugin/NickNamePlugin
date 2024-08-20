@@ -25,7 +25,7 @@ class NickNameManager(plugin: Plugin) {
     }
 
     fun makeTable() {
-        if (!File(dataBaseFilePath).exists()) {
+        if (!File(dataBaseFilePath).exists()) { // ファイルが無ければ
             val command = "CREATE TABLE IF NOT EXISTS NickNameTable (uuid TEXT PRIMARY KEY, nickname TEXT)"
             dataBaseManager.runSQLCommand(dataBaseFilePath, command)
         }
