@@ -10,6 +10,7 @@ class NickNameManager(plugin: Plugin) {
     fun setNickName(player: Player, nickName: String) {
         player.setDisplayName(nickName)
         player.setPlayerListName(nickName)
+        saveNickName(player, nickName) // データベースに保存
     }
 
     fun makeTable() {
@@ -19,8 +20,27 @@ class NickNameManager(plugin: Plugin) {
         }
     }
 
-    fun acquisitionNickname(player: Player): String {
-        val command = ""
-        return ""
+    fun acquisitionNickname(player: Player): String? {
+        val uuid = player.uniqueId
+        val command = "SELECT nickname FROM NickNameTable WHERE uuid = '$uuid';"
+        // データベースから結果を取得
+        val nickname = dataBaseManager.acquisitionStringValue(dataBaseFilePath, command, "nickname")
+
+        return nickname
+    }
+
+    private fun saveNickName(player: Player, nickName: String) {
+        val registrationValue = acquisitionNickname(player)
+        val uuid = player.uniqueId
+
+        val command = if (registrationValue == null) {
+            // 新しいレコードを挿入する
+            "INSERT INTO NickNameTable (uuid, nickname) VALUES ('$uuid', '$nickName');"
+        } else {
+            // 既存のレコードを更新する
+            "UPDATE NickNameTable SET nickname = '$nickName' WHERE uuid = '$uuid';"
+        }
+
+        dataBaseManager.runSQLCommand(dataBaseFilePath, command) // 保存
     }
 }

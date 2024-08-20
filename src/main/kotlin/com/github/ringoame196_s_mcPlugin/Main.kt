@@ -9,7 +9,7 @@ class Main : JavaPlugin() {
         plugin.saveDefaultConfig() // configファイルを生成
         val nickNameManager = NickNameManager(plugin)
         nickNameManager.makeTable() // table作成
-        server.pluginManager.registerEvents(Events(), plugin)
+        server.pluginManager.registerEvents(PlayerJoinEvent(plugin), plugin)
         // コマンド登録
         val command = getCommand("nickname")
         command!!.setExecutor(Command(plugin))
