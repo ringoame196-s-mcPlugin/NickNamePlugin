@@ -8,8 +8,14 @@ class NickNameManager(plugin: Plugin) {
     private val dataBaseManager = DataBaseManager()
     private val dataBaseFilePath = "${plugin.dataFolder.path}\\playerData.db"
     fun setNickName(player: Player, nickName: String) {
+        val playerName = player.name
         changeName(player, nickName)
-        saveNickName(player, nickName) // データベースに保存
+
+        if (nickName == playerName) {
+            resetNickName(player) // データベースから削除する
+        } else {
+            saveNickName(player, nickName) // データベースに保存
+        }
     }
 
     fun changeName(player: Player, nickName: String) {
@@ -49,7 +55,14 @@ class NickNameManager(plugin: Plugin) {
         dataBaseManager.runSQLCommand(dataBaseFilePath, command) // 保存
     }
 
+    private fun resetNickName(player: Player) {
+        val uuid = player.uniqueId
+        val command = "DELETE FROM NickNameTable WHERE uuid = '$uuid'"
+        dataBaseManager.runSQLCommand(dataBaseFilePath, command) // 削除する
+    }
+
     fun supportedColorCode(text: String): String {
+        // &->§に変えることでカラーコード対応
         return text.replace("&", "§")
     }
 }
