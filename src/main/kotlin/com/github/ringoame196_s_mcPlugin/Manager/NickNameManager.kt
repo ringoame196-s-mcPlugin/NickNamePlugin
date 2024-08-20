@@ -19,7 +19,7 @@ class NickNameManager(plugin: Plugin) {
     }
 
     fun changeName(player: Player, nickName: String) {
-        val supportedColorNickName = supportedColorCode(nickName)
+        val supportedColorNickName = "${supportedColorCode(nickName)}§f"
         player.setDisplayName(supportedColorNickName)
         player.setPlayerListName(supportedColorNickName)
     }
@@ -66,4 +66,3 @@ class NickNameManager(plugin: Plugin) {
         return text.replace("&", "§")
     }
 }
-
