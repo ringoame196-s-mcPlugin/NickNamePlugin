@@ -1,4 +1,4 @@
-package com.github.ringoame196_s_mcPlugin
+package com.github.ringoame196_s_mcPlugin.Manager
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
