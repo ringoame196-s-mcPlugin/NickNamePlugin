@@ -33,6 +33,7 @@ configurations["implementation"].extendsFrom(shadowImplementation)
 dependencies {
     shadowImplementation(kotlin("stdlib"))
     compileOnly("org.spigotmc:spigot-api:$pluginVersion-R0.1-SNAPSHOT")
+    implementation("org.xerial:sqlite-jdbc:3.46.1.0") // 最新バージョンを指定してください
 }
 
 configure<BukkitPluginDescription> {

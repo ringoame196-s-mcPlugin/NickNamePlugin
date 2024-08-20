@@ -1,3 +1,8 @@
+
+package com.github.ringoame196_s_mcPlugin.commands
+
+import com.github.ringoame196_s_mcPlugin.NickNameManager
+import com.github.ringoame196_s_mcPlugin.PermissionManager
 package com.github.ringoame196_s_mcPlugin
 
 import org.bukkit.Bukkit
@@ -11,6 +16,7 @@ import org.bukkit.plugin.Plugin
 
 class Command(plugin: Plugin) : CommandExecutor {
     private val permissionManager = PermissionManager()
+    private val nickNameManager = NickNameManager(plugin)
     private val nickNameManager = NickNameManager()
 
     private val config = plugin.config
@@ -22,6 +28,7 @@ class Command(plugin: Plugin) : CommandExecutor {
         }
 
         val selectPlayer = sender as? Player?
+        val nickName = args[0]
         val nickName = supportedColorCode(args[0])
 
         if (permissionManager.haveSetNickNamePermission(sender) || permissionManager.haveTempSetNickNameTag(sender, setNickNameTag)) { // 権限を持っていないとき
