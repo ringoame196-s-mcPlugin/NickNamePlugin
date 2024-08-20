@@ -64,5 +64,10 @@ class NickNameManager(plugin: Plugin) {
     fun supportedColorCode(text: String): String {
         // &->§に変えることでカラーコード対応
         return text.replace("&", "§")
+
+class NickNameManager {
+    fun setNickName(player: Player, nickName: String) {
+        player.setDisplayName(nickName)
+        player.setPlayerListName(nickName)
     }
 }

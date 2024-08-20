@@ -1,5 +1,6 @@
 package com.github.ringoame196_s_mcPlugin
 
+
 import com.github.ringoame196_s_mcPlugin.commands.Command
 import com.github.ringoame196_s_mcPlugin.commands.TabCompleter
 import com.github.ringoame196_s_mcPlugin.events.PlayerJoinEvent
@@ -13,6 +14,7 @@ class Main : JavaPlugin() {
         val nickNameManager = NickNameManager(plugin)
         nickNameManager.makeTable() // table作成
         server.pluginManager.registerEvents(PlayerJoinEvent(plugin), plugin)
+        server.pluginManager.registerEvents(Events(), plugin)
         // コマンド登録
         val command = getCommand("nickname")
         command!!.setExecutor(Command(plugin))
