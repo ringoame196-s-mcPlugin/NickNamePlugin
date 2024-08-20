@@ -1,5 +1,7 @@
 package com.github.ringoame196_s_mcPlugin
 
+import com.github.ringoame196_s_mcPlugin.commands.Command
+import com.github.ringoame196_s_mcPlugin.commands.TabCompleter
 import com.github.ringoame196_s_mcPlugin.events.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
 

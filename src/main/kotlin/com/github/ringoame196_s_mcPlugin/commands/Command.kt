@@ -1,5 +1,7 @@
-package com.github.ringoame196_s_mcPlugin
+package com.github.ringoame196_s_mcPlugin.commands
 
+import com.github.ringoame196_s_mcPlugin.NickNameManager
+import com.github.ringoame196_s_mcPlugin.PermissionManager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Sound
