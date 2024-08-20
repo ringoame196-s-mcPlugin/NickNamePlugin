@@ -1,10 +1,8 @@
 
 package com.github.ringoame196_s_mcPlugin.commands
 
-import com.github.ringoame196_s_mcPlugin.NickNameManager
-import com.github.ringoame196_s_mcPlugin.PermissionManager
-package com.github.ringoame196_s_mcPlugin
-
+import com.github.ringoame196_s_mcPlugin.Manager.NickNameManager
+import com.github.ringoame196_s_mcPlugin.Manager.PermissionManager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Sound
@@ -17,7 +15,6 @@ import org.bukkit.plugin.Plugin
 class Command(plugin: Plugin) : CommandExecutor {
     private val permissionManager = PermissionManager()
     private val nickNameManager = NickNameManager(plugin)
-    private val nickNameManager = NickNameManager()
 
     private val config = plugin.config
     private val setNickNameTag = config.getString("nickNameTag") ?: "nickNameTag"
@@ -29,7 +26,6 @@ class Command(plugin: Plugin) : CommandExecutor {
 
         val selectPlayer = sender as? Player?
         val nickName = args[0]
-        val nickName = supportedColorCode(args[0])
 
         if (permissionManager.haveSetNickNamePermission(sender) || permissionManager.haveTempSetNickNameTag(sender, setNickNameTag)) { // 権限を持っていないとき
             when (args.size) {
@@ -76,9 +72,5 @@ class Command(plugin: Plugin) : CommandExecutor {
     private fun staging(sender: CommandSender, sound: Sound) {
         val player = sender as? Player ?: return
         player.playSound(player, sound, 1f, 1f)
-    }
-
-    private fun supportedColorCode(text: String): String {
-        return text.replace("&", "§")
     }
 }
