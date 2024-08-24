@@ -2,29 +2,50 @@ package com.github.ringoame196_s_mcPlugin.Manager
 
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.sql.Statement
 
-class DataBaseManager() {
-    fun runSQLCommand(dbFilePath: String, command: String) {
-        var statement: Statement? = null
+class DataBaseManager {
+    fun runSQLCommand(dbFilePath: String, command: String, parameters: List<Any>? = null) {
+        val statement: Statement?
+        var connection: Connection? = null
+        val preparedStatement: PreparedStatement?
         try {
             statement = connection(dbFilePath) // 接続
-            statement?.executeUpdate(command)
+            connection = statement?.connection
+            preparedStatement = connection?.prepareStatement(command)
+
+            // パラメータをバインド
+            parameters?.forEachIndexed { index, param ->
+                preparedStatement?.setObject(index + 1, param)
+            }
+
+            preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
             // エラーハンドリング
             println("SQL Error: ${e.message}")
         } finally {
-            disconnect(statement?.connection) // 切断
+            disconnect(connection) // 切断
         }
     }
 
-    fun acquisitionStringValue(dbFilePath: String, command: String, label: String): String? {
+    fun acquisitionStringValue(dbFilePath: String, sql: String, parameters: List<Any>, label: String): String? {
         var value: String? = null
-        var statement: Statement? = null
+        val statement: Statement?
+        var connection: Connection? = null
+        val preparedStatement: PreparedStatement?
         try {
             statement = connection(dbFilePath) // 接続
-            val resultSet = statement?.executeQuery(command)
+            connection = statement?.connection
+            preparedStatement = connection?.prepareStatement(sql)
+
+            // パラメータをバインド
+            parameters.forEachIndexed { index, param ->
+                preparedStatement?.setObject(index + 1, param)
+            }
+
+            val resultSet = preparedStatement?.executeQuery()
             value = if (resultSet != null && resultSet.next()) {
                 resultSet.getString(label)
             } else {
@@ -34,7 +55,7 @@ class DataBaseManager() {
             // エラーハンドリング
             println("SQL Error: ${e.message}")
         } finally {
-            disconnect(statement?.connection) // 切断
+            disconnect(connection) // 切断
         }
         return value
     }
