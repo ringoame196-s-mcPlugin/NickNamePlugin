@@ -3,12 +3,6 @@
 ## プラグイン説明
 ニックネームを設定をすることができる
 
-
-
-https://github.com/user-attachments/assets/63ebe785-d574-48e5-8076-7cbed96dbefe
-
-
-
 ## コマンド
 /nickname <ニックネーム> (<対象のプレイヤー名>※OPのみ実行可能)
 
