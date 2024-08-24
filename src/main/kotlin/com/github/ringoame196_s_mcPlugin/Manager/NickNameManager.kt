@@ -33,9 +33,9 @@ class NickNameManager(plugin: Plugin) {
 
     fun acquisitionNickname(player: Player): String? {
         val uuid = player.uniqueId
-        val command = "SELECT nickname FROM NickNameTable WHERE uuid = '$uuid';"
+        val command = "SELECT nickname FROM NickNameTable WHERE uuid = ?;"
         // データベースから結果を取得
-        val nickname = dataBaseManager.acquisitionStringValue(dataBaseFilePath, command, "nickname")
+        val nickname = dataBaseManager.acquisitionStringValue(dataBaseFilePath, command, listOf(uuid), "nickname")
 
         return nickname
     }
@@ -44,21 +44,21 @@ class NickNameManager(plugin: Plugin) {
         val registrationValue = acquisitionNickname(player)
         val uuid = player.uniqueId
 
-        val command = if (registrationValue == null) {
+        if (registrationValue == null) {
             // 新しいレコードを挿入する
-            "INSERT INTO NickNameTable (uuid, nickname) VALUES ('$uuid', '$nickName');"
+            val command = "INSERT INTO NickNameTable (uuid, nickname) VALUES (?, ?);"
+            dataBaseManager.runSQLCommand(dataBaseFilePath, command, listOf(uuid, nickName)) // 保存
         } else {
             // 既存のレコードを更新する
-            "UPDATE NickNameTable SET nickname = '$nickName' WHERE uuid = '$uuid';"
+            val command = "UPDATE NickNameTable SET nickname = ? WHERE uuid = ?;"
+            dataBaseManager.runSQLCommand(dataBaseFilePath, command, listOf(nickName, uuid)) // 保存
         }
-
-        dataBaseManager.runSQLCommand(dataBaseFilePath, command) // 保存
     }
 
     private fun resetNickName(player: Player) {
         val uuid = player.uniqueId
-        val command = "DELETE FROM NickNameTable WHERE uuid = '$uuid'"
-        dataBaseManager.runSQLCommand(dataBaseFilePath, command) // 削除する
+        val command = "DELETE FROM NickNameTable WHERE uuid = ?"
+        dataBaseManager.runSQLCommand(dataBaseFilePath, command, listOf(uuid)) // 削除する
     }
 
     fun supportedColorCode(text: String): String {
